@@ -140,6 +140,8 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Filtro Gris 9");
         comboboxFiltros.addItem("Brillo"); //
         comboboxFiltros.addItem("Mosaico");
+        comboboxFiltros.addItem("Alto Contraste");
+        comboboxFiltros.addItem("Inverso");
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
     }
@@ -190,8 +192,6 @@ public class FiltroApp extends JFrame{
  */
 
     public void colocarEventos(){
-
-
 
             //Evento de busqueda 
             buttonBusqueda.addActionListener(new ActionListener() {
@@ -305,6 +305,26 @@ public class FiltroApp extends JFrame{
                         } catch (Exception ex){} 
                         
                     }
+                    if(filtro.equals("Alto Contraste")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroAltoContraste();
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Inverso")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroInverso();
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
                     if(filtro.equals("Brillo")){
                         mostrarComponentesBrilla();
                         
@@ -315,7 +335,7 @@ public class FiltroApp extends JFrame{
                     }
 
                 }
-
+                
 
             } );
             

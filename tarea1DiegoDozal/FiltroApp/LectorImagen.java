@@ -13,6 +13,10 @@ class LectorImagen {
         private BufferedImage imagenFiltrada; 
         private int ancho; 
         private int alto;
+
+        //Convoluciones 
+        //Primera convolucion 
+        private int[][] conv= {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}; 
         
         public LectorImagen(String path){
             try {
@@ -247,6 +251,108 @@ class LectorImagen {
             Color promColor = new Color(promRed, promGreen, promBlue);
             return promColor; 
 
+        }
+
+
+        /**
+         * Metodo de alto contraste 
+         * @param convolution
+         */
+        public void filtroAltoContraste(){
+            this.filtro_gris_(1);
+            try {
+                for(int i=0; i < ancho; i++){
+                    for(int j=0; j< alto; j++){
+                        //Obtiene el valor de cada pixel 
+                        int pixel = imagenFiltrada.getRGB(i, j);
+                        // Generamos el color que rellenara a cada pixel 
+                        Color color = new Color(pixel,true);
+                        //Obtenemos los colores de ese pixel 
+                        int val = color.getRed(); 
+                        
+                        int newVal =0; 
+
+                        if(val > 127 ){
+                            newVal = 255; 
+                        }
+                        
+                        color = new Color(newVal,newVal,newVal);
+                        imagenFiltrada.setRGB(i, j, color.getRGB()); 
+    
+                    }
+                }    
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+        /**
+         * Metodo para el filto de Inverso 
+         * @param convolution
+         */
+        public void filtroInverso(){
+            this.filtro_gris_(1);
+            try {
+                for(int i=0; i < ancho; i++){
+                    for(int j=0; j< alto; j++){
+                        //Obtiene el valor de cada pixel 
+                        int pixel = imagenFiltrada.getRGB(i, j);
+                        // Generamos el color que rellenara a cada pixel 
+                        Color color = new Color(pixel,true);
+                        //Obtenemos los colores de ese pixel 
+                        int val = color.getRed(); 
+                        
+                        int newVal =255; 
+
+                        if(val > 127 ){
+                            newVal = 0; 
+                        }
+                        
+                        color = new Color(newVal,newVal,newVal);
+                        imagenFiltrada.setRGB(i, j, color.getRGB()); 
+    
+                    }
+                }    
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+        /**
+         * Filtro que aplica una convulsion 
+         * @param convolution
+         */
+        public void aplicarConvolucion(int[][] convolution ){
+            try {
+                for(int i=0; i < ancho; i++){
+                    for(int j=0; j< alto; j++){
+                        //Obtiene el valor de cada pixel 
+                        int pixel = imagenFiltrada.getRGB(i, j);
+                        // Generamos el color que rellenara a cada pixel 
+                        Color color = new Color(pixel,true);
+                        //Obtenemos los colores de ese pixel 
+        
+                        float red=0;
+                        float green=0; 
+                        float blue=0; 
+    
+                        for (int filterY = 0; filterY < convolution.length; filterY++) {
+                            for (int filterX = 0; filterX < convolution.length; filterX++ ) {
+                                int imageX = (i - convolution.length/2 + filterX + ancho ) % ancho; 
+                                int imageY = (j - convolution.length/2 + filterY + alto ) % alto;
+                            
+                            }
+                        }
+                        
+                        
+                        /* color = new Color(nr,ng,nb);
+                        imagenFiltrada.setRGB(i, j, color.getRGB());  */
+    
+                    }
+                }    
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
         }
 
 
