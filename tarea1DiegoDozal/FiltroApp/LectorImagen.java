@@ -319,6 +319,33 @@ class LectorImagen {
         }
 
         /**
+         * Metodo para el filtro de Componentes RGB 
+         * @param convolution
+         */
+        public void filtroRGB(int red, int green, int blue){
+            try {
+                for(int i=0; i < ancho; i++){
+                    for(int j=0; j< alto; j++){
+                        //Obtiene el valor de cada pixel 
+                        int pixel = imagenFiltrada.getRGB(i, j);
+                        // Generamos el color que rellenara a cada pixel 
+                        Color color = new Color(pixel,true);
+                        //Obtenemos los colores de ese pixel 
+                        int r = color.getRed(); 
+                        int g = color.getGreen();
+                        int b = color.getGreen(); 
+
+                        color = new Color(red&r, green&g, blue&b );
+                        imagenFiltrada.setRGB(i, j, color.getRGB()); 
+    
+                    }
+                }    
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+        /**
          * Filtro que aplica una convulsion 
          * @param convolution
          */

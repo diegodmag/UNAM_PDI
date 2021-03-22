@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.plaf.SliderUI;
 import javax.swing.text.AttributeSet.ColorAttribute;
 
 import jdk.nashorn.api.tree.Tree;
@@ -21,7 +24,7 @@ import javax.imageio.ImageIO;
  */
 public class FiltroApp extends JFrame{
 
-    private JPanel panelPrincipal; 
+    private JPanel panelPrincipal;  
     private JLabel labelBusqueda; 
     private JLabel labelSeleccionFiltro; 
     private JLabel labelImagenOriginal;
@@ -32,16 +35,30 @@ public class FiltroApp extends JFrame{
     private JButton buttonAplicar; 
     private JButton buttonAplicarBrillo; 
     private JButton buttonAplicarMosaico; 
+    
     private JComboBox <String>comboboxFiltros;  
-    //private JScrollBar scrollBarBrillo; 
     private JTextField textFieldBrillo; 
     private JTextField textFieldAnchoMosaico; 
     private JTextField textFIeldAltoMosaico; 
     
     private ImageIcon imagenOriginal;
     private File file; 
-    
+
     ///Para la modificacion de la imagen 
+    private JPanel panelRGB;
+    private JFrame frameRGB; 
+    private JSlider sliderRed; 
+    private JSlider sliderGreen; 
+    private JSlider sliderBlue; 
+    private JLabel redLabel;
+    private JLabel greenLabel;
+    private JLabel blueLabel; 
+    private JLabel redValueLabel;
+    private JLabel greenValueLabel;
+    private JLabel blueValueLabel; 
+    
+
+    private JButton buttonAplicarComponenteRGB;
 
 
     public FiltroApp(){
@@ -51,29 +68,45 @@ public class FiltroApp extends JFrame{
 
     private void inicializarComponente(){
         //Inicializa JFrame 
-        
-        this.setBounds(300, 200, 1400, 600);
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        this.colocarFrames();    
         //Coloca los otros componentes 
         this.colocarPaneles();
         this.colocarLabels();
         this.colocarBotones();
-        this.colocarEventos();
         this.colocarCombobox();
         this.colocarTextField();
+
+        //Coloca los componentes de ventanas hijas 
+        this.colocarComponentesRGB();
+
+        //Coloca los eventos
+        this.colocarEventos();
         
     }
 
+    private void colocarFrames(){
+        this.setBounds(300, 200, 1400, 600);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        frameRGB = new JFrame();
+        frameRGB.setBounds(450, 300, 600, 400);
+        frameRGB.setBackground(Color.RED);
+
+    }
 
     private void colocarPaneles(){
 
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(null);
         this.getContentPane().add(panelPrincipal);
+
+        panelRGB = new JPanel();
+        panelRGB.setLayout(null);
+        frameRGB.getContentPane().add(panelRGB);
+        //panelPrincipal.add(panelRGB);
     }
 
  
-
      private void colocarLabels(){
         labelBusqueda = new JLabel("Seleccione una imagen"); 
         labelBusqueda.setBounds(30, 10, 200, 20);
@@ -142,6 +175,7 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Mosaico");
         comboboxFiltros.addItem("Alto Contraste");
         comboboxFiltros.addItem("Inverso");
+        comboboxFiltros.addItem("Componentes RGB");
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
     }
@@ -166,6 +200,68 @@ public class FiltroApp extends JFrame{
 
     }
 
+    private void colocarComponentesRGB(){
+        
+        //ROJO
+        sliderRed = new JSlider(0,255);
+        sliderRed.setBounds(130, 30, 350, 50);
+        sliderRed.setPaintLabels(true);
+        sliderRed.setPaintTicks(true);
+        sliderRed.setMajorTickSpacing(51);
+        sliderRed.setMinorTickSpacing(5);
+        panelRGB.add(sliderRed);
+
+        redLabel = new JLabel("RED");
+        redLabel.setBounds(60, 30, 50, 30);
+        panelRGB.add(redLabel);
+
+        redValueLabel = new JLabel(" ");
+        redValueLabel.setBounds(500, 30, 50, 30);
+        panelRGB.add(redValueLabel);
+
+        //VERDE
+        sliderGreen = new JSlider(0,255);
+        sliderGreen.setBounds(130, 90, 350, 50);
+        sliderGreen.setPaintLabels(true);
+        sliderGreen.setPaintTicks(true);
+        sliderGreen.setMajorTickSpacing(51);
+        sliderGreen.setMinorTickSpacing(5);
+        panelRGB.add(sliderGreen);
+
+        greenLabel = new JLabel("GREEN");
+        greenLabel.setBounds(60, 90, 50, 30);
+        panelRGB.add(greenLabel);
+
+        greenValueLabel = new JLabel(" ");
+        greenValueLabel.setBounds(500, 90, 50, 30);
+        panelRGB.add(greenValueLabel);
+
+        //AZUL
+        sliderBlue = new JSlider(0,255);
+        sliderBlue.setBounds(130, 150, 350, 50);
+        sliderBlue.setPaintLabels(true);
+        sliderBlue.setPaintTicks(true);
+        sliderBlue.setMajorTickSpacing(51);
+        sliderBlue.setMinorTickSpacing(5);
+        panelRGB.add(sliderBlue);
+
+        blueLabel = new JLabel("GREEN");
+        blueLabel.setBounds(60, 150, 50, 30);
+        panelRGB.add(blueLabel);
+
+        blueValueLabel = new JLabel(" ");
+        blueValueLabel.setBounds(500, 150, 50, 30);
+        panelRGB.add(blueValueLabel);
+
+
+
+        buttonAplicarComponenteRGB = new JButton("Aplicar");
+        buttonAplicarComponenteRGB.setBounds(250, 300, 100, 30);
+        panelRGB.add(buttonAplicarComponenteRGB);
+       
+
+    }
+
     private void mostrarComponentesBrilla(){
         labelBrillo.setVisible(true);
         textFieldBrillo.setVisible(true);
@@ -180,7 +276,7 @@ public class FiltroApp extends JFrame{
         buttonAplicarMosaico.setVisible(true);
     }
 
-
+    
 
 /*     private void colocarScrollBar(){
         scrollBarBrillo = new JScrollBar(0,0,1,0,100);
@@ -333,6 +429,17 @@ public class FiltroApp extends JFrame{
 
                         mostrarComponentesMosaico();
                     }
+                    if(filtro.equals("Componentes RGB")){
+                        frameRGB.setVisible(true);                     
+/*                         try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroInverso();
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){}  */
+                        
+                    }
 
                 }
                 
@@ -368,8 +475,37 @@ public class FiltroApp extends JFrame{
                 }
              });
 
+             buttonAplicarComponenteRGB.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                        lector.filtroRGB(sliderRed.getValue(), sliderGreen.getValue(), sliderBlue.getValue());;
+                        Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                        ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                        labelImagenFiltro.setIcon(nuevaImagen);
+                        
+                    } catch (Exception ex){} 
+                }
+             });
 
-             
+
+             sliderRed.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e){
+                    redValueLabel.setText(String.valueOf(sliderRed.getValue())); 
+                }
+             });;
+
+             sliderGreen.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e){
+                    greenValueLabel.setText(String.valueOf(sliderGreen.getValue())); 
+                }
+             });;
+
+             sliderBlue.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e){
+                    blueValueLabel.setText(String.valueOf(sliderBlue.getValue())); 
+                }
+             });;
 
     }   
 
