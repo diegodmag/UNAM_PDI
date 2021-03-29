@@ -16,7 +16,7 @@ class LectorImagen {
 
         //Convoluciones 
         //Primera convolucion 
-        private int[][] conv= {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}; 
+        private double[][] blur = {{0.0, 0.2, 0.0}, {0.2, 0.2, 0.2}, {0.0, 0.2, 0.0}}; 
         
         public LectorImagen(String path){
             try {
@@ -349,37 +349,78 @@ class LectorImagen {
          * Filtro que aplica una convulsion 
          * @param convolution
          */
-        public void aplicarConvolucion(int[][] convolution ){
+        public void aplicarConvolucion(double[][] convolution, double f, double b ){
+
+            double factor = f; 
+            double bias = b; 
+
             try {
                 for(int i=0; i < ancho; i++){
                     for(int j=0; j< alto; j++){
-                        //Obtiene el valor de cada pixel 
-                        int pixel = imagenFiltrada.getRGB(i, j);
-                        // Generamos el color que rellenara a cada pixel 
-                        Color color = new Color(pixel,true);
-                        //Obtenemos los colores de ese pixel 
         
-                        float red=0;
-                        float green=0; 
-                        float blue=0; 
+                        double red=0.0;
+                        double green=0.0; 
+                        double blue=0.0; 
     
                         for (int filterY = 0; filterY < convolution.length; filterY++) {
                             for (int filterX = 0; filterX < convolution.length; filterX++ ) {
+                                
                                 int imageX = (i - convolution.length/2 + filterX + ancho ) % ancho; 
                                 int imageY = (j - convolution.length/2 + filterY + alto ) % alto;
+
+                                //Obtiene el valor de cada pixel 
+                                int pixel = imagenFiltrada.getRGB(imageX, imageY);
+                                // Generamos el color que rellenara a cada pixel 
+                                Color color = new Color(pixel,true);
+                                //Obtenemos los colores de ese pixel 
+
+                                red += color.getRed()*convolution[filterY][filterX]; 
+                                green += color.getGreen()*convolution[filterY][filterX];
+                                blue += color.getBlue()*convolution[filterY][filterX];
                             
                             }
+ 
                         }
                         
-                        
-                        /* color = new Color(nr,ng,nb);
-                        imagenFiltrada.setRGB(i, j, color.getRGB());  */
+                        int finalRed = Math.min(Math.max((int)(factor*red+bias), 0), 255); 
+                        int finalGreen = Math.min(Math.max((int)(factor*green+bias), 0), 255); 
+                        int finalBlue = Math.min(Math.max((int)(factor*blue+bias), 0), 255); 
+
+                        Color color = new Color(finalRed, finalGreen, finalBlue );
+                        imagenFiltrada.setRGB(i, j, color.getRGB());
     
                     }
                 }    
             } catch (Exception e) {
                 //TODO: handle exception
             }
+        }
+
+
+        /**
+         * 
+         */
+        public void filtroConvolucion(int option){
+           switch (option) {
+                case 1:
+                   aplicarConvolucion(blur, 1.0, 0.0);
+                   break;
+                case 2:
+                   
+                   break;
+                case 3:
+                   
+                   break;
+                case 4:
+                   
+                   break;
+                case 5:
+                   
+                   break;
+           
+                default:
+                   break;
+           }
         }
 
 

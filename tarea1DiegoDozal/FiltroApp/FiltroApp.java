@@ -176,6 +176,7 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Alto Contraste");
         comboboxFiltros.addItem("Inverso");
         comboboxFiltros.addItem("Componentes RGB");
+        comboboxFiltros.addItem("Convolucion");
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
     }
@@ -421,6 +422,16 @@ public class FiltroApp extends JFrame{
                         } catch (Exception ex){} 
                         
                     }
+                    if(filtro.equals("Convolucion")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(1);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
                     if(filtro.equals("Brillo")){
                         mostrarComponentesBrilla();
                         
@@ -431,16 +442,9 @@ public class FiltroApp extends JFrame{
                     }
                     if(filtro.equals("Componentes RGB")){
                         frameRGB.setVisible(true);                     
-/*                         try{
-                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
-                            lector.filtroInverso();
-                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
-                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
-                            labelImagenFiltro.setIcon(nuevaImagen);
-                        } catch (Exception ex){}  */
                         
                     }
-
+                    
                 }
                 
 
