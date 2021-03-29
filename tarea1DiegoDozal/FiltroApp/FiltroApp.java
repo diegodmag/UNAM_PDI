@@ -176,7 +176,12 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Alto Contraste");
         comboboxFiltros.addItem("Inverso");
         comboboxFiltros.addItem("Componentes RGB");
-        comboboxFiltros.addItem("Convolucion");
+        comboboxFiltros.addItem("Blur 1");
+        comboboxFiltros.addItem("Blur 2");
+        comboboxFiltros.addItem("Motion Blur");
+        comboboxFiltros.addItem("Encontrar Bordes");
+        comboboxFiltros.addItem("Sharpen");
+        comboboxFiltros.addItem("Emboss");
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
     }
@@ -422,10 +427,60 @@ public class FiltroApp extends JFrame{
                         } catch (Exception ex){} 
                         
                     }
-                    if(filtro.equals("Convolucion")){
+                    if(filtro.equals("Blur 1")){
                         try{
                             LectorImagen lector = new LectorImagen(file.getAbsolutePath());
                             lector.filtroConvolucion(1);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Blur 2")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(2);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Motion Blur")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(3);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Encontrar Bordes")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(4);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Sharpen")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(5);
+                            Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
+                            labelImagenFiltro.setIcon(nuevaImagen);
+                        } catch (Exception ex){} 
+                        
+                    }
+                    if(filtro.equals("Emboss")){
+                        try{
+                            LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+                            lector.filtroConvolucion(6);
                             Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
                             ImageIcon nuevaImagen = new ImageIcon(imgScale);
                             labelImagenFiltro.setIcon(nuevaImagen);

@@ -17,7 +17,12 @@ class LectorImagen {
         //Convoluciones 
         //Primera convolucion 
         private double[][] blur = {{0.0, 0.2, 0.0}, {0.2, 0.2, 0.2}, {0.0, 0.2, 0.0}}; 
-        
+        private int[][] blurS = {{0, 0, 1, 0, 0}, {0, 1, 1, 1, 0}, {1,1,1,1,1}, {0, 1, 1, 1, 0}, {0, 0, 1, 0, 0}};
+        private int[][] motionBlur = {{1,0,0,0,0,0,0,0,0}, {0,1,0,0,0,0,0,0,0}, {0,0,1,0,0,0,0,0,0}, {0,0,0,1,0,0,0,0,0}, {0,0,0,0,1,0,0,0,0}, {0,0,0,0,0,1,0,0,0}, {0,0,0,0,0,0,1,0,0}, {0,0,0,0,0,0,0,1,0}, {0,0,0,0,0,0,0,0,1}};
+        private int[][] findEdges = {{-1, 0,0,0,0}, {0, -2,0,0,0}, {0,0,6,0,0}, {0,0,0,-2,0}, {0,0,0,0,-1}};
+        private int[][] sharpen = {{-1,-1,-1}, {-1,9,-1}, {-1,-1,-1}};
+        private int[][] emboss = {{-1,-1,-1,-1,0}, {-1,-1,-1,0,1}, {-1,-1,0,1,1}, {-1,0,1,1,1}, {0,1,1,1,1}}; 
+
         public LectorImagen(String path){
             try {
                 File input = new File(path);
@@ -256,7 +261,6 @@ class LectorImagen {
 
         /**
          * Metodo de alto contraste 
-         * @param convolution
          */
         public void filtroAltoContraste(){
             this.filtro_gris_(1);
@@ -288,7 +292,6 @@ class LectorImagen {
 
         /**
          * Metodo para el filto de Inverso 
-         * @param convolution
          */
         public void filtroInverso(){
             this.filtro_gris_(1);
@@ -320,7 +323,9 @@ class LectorImagen {
 
         /**
          * Metodo para el filtro de Componentes RGB 
-         * @param convolution
+         * @param red
+         * @param green 
+         * @param blue 
          */
         public void filtroRGB(int red, int green, int blue){
             try {
@@ -346,10 +351,67 @@ class LectorImagen {
         }
 
         /**
-         * Filtro que aplica una convulsion 
+         * Filtro que aplica una convulsion con arreglo bidimensional de doubles 
          * @param convolution
+         * @param f
+         * @param b
          */
         public void aplicarConvolucion(double[][] convolution, double f, double b ){
+
+            double factor = f; 
+            double bias = b; 
+
+            try {
+                for(int i=0; i < ancho; i++){
+                    for(int j=0; j< alto; j++){
+        
+                        double red=0.0;
+                        double green=0.0; 
+                        double blue=0.0; 
+    
+                        for (int filterY = 0; filterY < convolution.length; filterY++) {
+                            for (int filterX = 0; filterX < convolution.length; filterX++ ) {
+                                
+                                int imageX = (i - convolution.length/2 + filterX + ancho ) % ancho; 
+                                int imageY = (j - convolution.length/2 + filterY + alto ) % alto;
+
+                                //Obtiene el valor de cada pixel 
+                                int pixel = imagenFiltrada.getRGB(imageX, imageY);
+                                // Generamos el color que rellenara a cada pixel 
+                                Color color = new Color(pixel,true);
+                                //Obtenemos los colores de ese pixel 
+
+                                red += color.getRed()*convolution[filterY][filterX]; 
+                                green += color.getGreen()*convolution[filterY][filterX];
+                                blue += color.getBlue()*convolution[filterY][filterX];
+                            
+                            }
+ 
+                        }
+                        
+                        int finalRed = Math.min(Math.max((int)(factor*red+bias), 0), 255); 
+                        int finalGreen = Math.min(Math.max((int)(factor*green+bias), 0), 255); 
+                        int finalBlue = Math.min(Math.max((int)(factor*blue+bias), 0), 255); 
+
+                        Color color = new Color(finalRed, finalGreen, finalBlue );
+                        imagenFiltrada.setRGB(i, j, color.getRGB());
+    
+                    }
+                }    
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+
+
+        /**
+         * Filtro que aplica una convulsion con arreglo bidimensional de enteros 
+         * @param convolution
+         * @param f
+         * @param b
+         */
+        public void aplicarConvolucion(int[][] convolution, double f, double b ){
 
             double factor = f; 
             double bias = b; 
@@ -406,18 +468,21 @@ class LectorImagen {
                    aplicarConvolucion(blur, 1.0, 0.0);
                    break;
                 case 2:
-                   
+                   aplicarConvolucion(blurS, 1.0/13.0, 0.0);
                    break;
                 case 3:
-                   
+                   aplicarConvolucion(motionBlur, 1.0/9.0, 0.0);
                    break;
                 case 4:
-                   
+                   aplicarConvolucion(findEdges, 1.0, 0.0);
                    break;
                 case 5:
-                   
+                   aplicarConvolucion(sharpen, 1.0/13.0, 0.0);
                    break;
-           
+                case 6:
+                   aplicarConvolucion(emboss, 1.0, 128.0);
+                   break;
+                   
                 default:
                    break;
            }
