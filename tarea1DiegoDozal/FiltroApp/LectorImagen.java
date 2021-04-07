@@ -15,13 +15,42 @@ class LectorImagen {
         private int alto;
 
         //Convoluciones 
-        //Primera convolucion 
-        private double[][] blur = {{0.0, 0.2, 0.0}, {0.2, 0.2, 0.2}, {0.0, 0.2, 0.0}}; 
-        private int[][] blurS = {{0, 0, 1, 0, 0}, {0, 1, 1, 1, 0}, {1,1,1,1,1}, {0, 1, 1, 1, 0}, {0, 0, 1, 0, 0}};
-        private int[][] motionBlur = {{1,0,0,0,0,0,0,0,0}, {0,1,0,0,0,0,0,0,0}, {0,0,1,0,0,0,0,0,0}, {0,0,0,1,0,0,0,0,0}, {0,0,0,0,1,0,0,0,0}, {0,0,0,0,0,1,0,0,0}, {0,0,0,0,0,0,1,0,0}, {0,0,0,0,0,0,0,1,0}, {0,0,0,0,0,0,0,0,1}};
-        private int[][] findEdges = {{-1, 0,0,0,0}, {0, -2,0,0,0}, {0,0,6,0,0}, {0,0,0,-2,0}, {0,0,0,0,-1}};
-        private int[][] sharpen = {{-1,-1,-1}, {-1,9,-1}, {-1,-1,-1}};
-        private int[][] emboss = {{-1,-1,-1,-1,0}, {-1,-1,-1,0,1}, {-1,-1,0,1,1}, {-1,0,1,1,1}, {0,1,1,1,1}}; 
+        
+        private double[][] blur = {{0.0, 0.2, 0.0}, 
+                                   {0.2, 0.2, 0.2}, 
+                                   {0.0, 0.2, 0.0}}; 
+
+        private int[][] blurS = {{0, 0, 1, 0, 0}, 
+                                 {0, 1, 1, 1, 0}, 
+                                 {1,1,1,1,1}, 
+                                 {0, 1, 1, 1, 0}, 
+                                 {0, 0, 1, 0, 0}};
+
+        private int[][] motionBlur = {{1,0,0,0,0,0,0,0,0}, 
+                                      {0,1,0,0,0,0,0,0,0}, 
+                                      {0,0,1,0,0,0,0,0,0}, 
+                                      {0,0,0,1,0,0,0,0,0}, 
+                                      {0,0,0,0,1,0,0,0,0}, 
+                                      {0,0,0,0,0,1,0,0,0}, 
+                                      {0,0,0,0,0,0,1,0,0}, 
+                                      {0,0,0,0,0,0,0,1,0}, 
+                                      {0,0,0,0,0,0,0,0,1}};
+
+        private int[][] findEdges = {{-1,0,0,0,0}, 
+                                     {0,-2,0,0,0}, 
+                                     {0,0,6,0,0}, 
+                                     {0,0,0,-2,0}, 
+                                     {0,0,0,0,-1}};
+
+        private int[][] sharpen = {{-1,-1,-1}, 
+                                   {-1,9,-1}, 
+                                   {-1,-1,-1}};
+
+        private int[][] emboss = {{-1,-1,-1,-1,0}, 
+                                  {-1,-1,-1,0,1}, 
+                                  {-1,-1,0,1,1}, 
+                                  {-1,0,1,1,1}, 
+                                  {0,1,1,1,1}}; 
 
         public LectorImagen(String path){
             try {
@@ -378,7 +407,7 @@ class LectorImagen {
                                 //Obtiene el valor de cada pixel 
                                 int pixel = imagenFiltrada.getRGB(imageX, imageY);
                                 // Generamos el color que rellenara a cada pixel 
-                                Color color = new Color(pixel,true);
+                                Color color = new Color(pixel,false);
                                 //Obtenemos los colores de ese pixel 
 
                                 red += color.getRed()*convolution[filterY][filterX]; 
@@ -413,12 +442,17 @@ class LectorImagen {
          */
         public void aplicarConvolucion(int[][] convolution, double f, double b ){
 
+            	
+            BufferedImage copia = deepCopy(imagenFiltrada);
+
             double factor = f; 
             double bias = b; 
+ 
 
             try {
-                for(int i=0; i < ancho; i++){
-                    for(int j=0; j< alto; j++){
+                for(int i=0; i < alto; i++){
+
+                    for(int j=0; j< ancho; j++){
         
                         double red=0.0;
                         double green=0.0; 
@@ -427,38 +461,52 @@ class LectorImagen {
                         for (int filterY = 0; filterY < convolution.length; filterY++) {
                             for (int filterX = 0; filterX < convolution.length; filterX++ ) {
                                 
-                                int imageX = (i - convolution.length/2 + filterX + ancho ) % ancho; 
-                                int imageY = (j - convolution.length/2 + filterY + alto ) % alto;
+                                ///Cambio 
+                                int imageX = (j - convolution.length/2 + filterX + ancho ) % ancho; 
+                                int imageY = (i - convolution.length/2 + filterY + alto ) % alto;
+                                ///Cambio 
+
 
                                 //Obtiene el valor de cada pixel 
                                 int pixel = imagenFiltrada.getRGB(imageX, imageY);
                                 // Generamos el color que rellenara a cada pixel 
-                                Color color = new Color(pixel,true);
+                                Color color = new Color(pixel);
                                 //Obtenemos los colores de ese pixel 
+                                
+                                int tmpR = color.getRed();
+                                int tmpG = color.getGreen(); 
+                                int tmpB = color.getBlue();    
 
-                                red += color.getRed()*convolution[filterY][filterX]; 
-                                green += color.getGreen()*convolution[filterY][filterX];
-                                blue += color.getBlue()*convolution[filterY][filterX];
+
+                                red += tmpR*convolution[filterY][filterX]; 
+                                green += tmpG*convolution[filterY][filterX];
+                                blue += tmpB*convolution[filterY][filterX];
+                                
                             
                             }
  
                         }
                         
-                        int finalRed = Math.min(Math.max((int)(factor*red+bias), 0), 255); 
-                        int finalGreen = Math.min(Math.max((int)(factor*green+bias), 0), 255); 
-                        int finalBlue = Math.min(Math.max((int)(factor*blue+bias), 0), 255); 
-
-                        Color color = new Color(finalRed, finalGreen, finalBlue );
-                        imagenFiltrada.setRGB(i, j, color.getRGB());
-    
+                        
+                        Color color = new Color(Math.min(Math.max((int)(factor*red+bias), 0), 255), 
+                                                Math.min(Math.max((int)(factor*green+bias) , 0), 255), 
+                                                Math.min(Math.max((int)(factor*blue+bias), 0), 255));
+                        
+                                            //Cambio 
+                        copia.setRGB(j, i, color.getRGB());
+                                            //Cambio 
+                        
                     }
+
+                     
                 }    
+                this.imagenFiltrada = copia; 
             } catch (Exception e) {
-                //TODO: handle exception
+                e.printStackTrace();
             }
         }
 
-
+       
         /**
          * 
          */
@@ -468,16 +516,16 @@ class LectorImagen {
                    aplicarConvolucion(blur, 1.0, 0.0);
                    break;
                 case 2:
-                   aplicarConvolucion(blurS, 1.0/13.0, 0.0);
+                   aplicarConvolucion(blurS, (1.0/13.0), 0.0);
                    break;
                 case 3:
-                   aplicarConvolucion(motionBlur, 1.0/9.0, 0.0);
+                   aplicarConvolucion(motionBlur, (1.0/9.0), 0.0);
                    break;
                 case 4:
                    aplicarConvolucion(findEdges, 1.0, 0.0);
                    break;
                 case 5:
-                   aplicarConvolucion(sharpen, 1.0/13.0, 0.0);
+                   aplicarConvolucion(sharpen, 1.0, 0.0);
                    break;
                 case 6:
                    aplicarConvolucion(emboss, 1.0, 128.0);
@@ -488,5 +536,13 @@ class LectorImagen {
            }
         }
 
+    
+
+    static BufferedImage deepCopy(BufferedImage bi) {
+    ColorModel cm = bi.getColorModel();
+    boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+    WritableRaster raster = bi.copyData(null);
+    return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }    
 
 } 
