@@ -202,15 +202,24 @@ class LectorImagen {
 
             for (int i = 0; i < ancho; i+=a) {
                 for (int j = 0; j < alto; j+=l) { 
-                    Color c = this.getColorPromedio(i, j, a+i, l+j);
-                    aplicarColor(c, i, j, a+i, l+j);
-                    if(j == alto-l){
-                        aplicarColor(c, i, alto-l, a+i, alto);
-                    }  
-                    if (i == ancho-a && j < alto) {
-                        aplicarColor(c, ancho-a, j, ancho, l+j);
-                    }                     
-                    
+
+                    if(i+a > ancho && j+l > alto){
+                        Color c = this.getColorPromedio(i, j, ancho, alto);
+                        aplicarColor(c, i, j, ancho, alto);
+                    }
+                    else if(i+a > ancho){   
+                        Color c = this.getColorPromedio(i, j, ancho, l+j);
+                        aplicarColor(c, i, j, ancho, l+j);
+                    }
+                    else if(j+l > alto){
+                        Color c = this.getColorPromedio(i, j, i+a, alto);
+                        aplicarColor(c, i, j, i+a, alto);
+                    }
+                    else {
+                        Color c = this.getColorPromedio(i, j, a+i, l+j);
+                        aplicarColor(c, i, j, a+i, l+j);
+                    }
+                       
                 }
                 
             }
