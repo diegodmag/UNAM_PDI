@@ -84,7 +84,7 @@ public class FiltroApp extends JFrame{
     }
 
     private void colocarFrames(){
-        this.setBounds(300, 200, 1400, 600);
+        this.setBounds(300, 200, 1800, 800);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         frameRGB = new JFrame();
@@ -116,12 +116,12 @@ public class FiltroApp extends JFrame{
         panelPrincipal.add(labelSeleccionFiltro);
 
         labelImagenOriginal = new JLabel();
-        labelImagenOriginal.setBounds(400, 20, 380, 480);
+        labelImagenOriginal.setBounds(400, 20, 580, 680);
         panelPrincipal.add(labelImagenOriginal);
         
 
         labelImagenFiltro = new JLabel();
-        labelImagenFiltro.setBounds(850, 20, 380, 480);
+        labelImagenFiltro.setBounds(1050, 20, 580, 680);
         panelPrincipal.add(labelImagenFiltro);
 
         labelBrillo = new JLabel("Ingrese el Brillo en Int");

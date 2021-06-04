@@ -561,7 +561,7 @@ class LectorImagen {
             Graphics2D img = canvas.createGraphics(); 
             String chain = "M"; 
             //Generamos los Fonts 
-            Font font = new Font("Arial", Font.PLAIN,8);
+            Font font = new Font("Arial", Font.PLAIN,6);
             //Para modificar los atributos del Font 
             AttributedString as = new AttributedString(chain);
             as.addAttribute(TextAttribute.FONT, font);
@@ -571,26 +571,29 @@ class LectorImagen {
 
             img.setFont(font);
 
-            for (int i = 0; i < ancho; i+=10) {
-                for (int j = 0; j < alto; j+=10) { 
+            int a =8; 
+            int b =8; 
 
-                    if(i+10 > ancho && j+10 > alto){
+            for (int i = 0; i < ancho; i+=a) {
+                for (int j = 0; j < alto; j+=b) { 
+
+                    if(i+a > ancho && j+b > alto){
                         c = this.getColorPromedio(i, j, ancho, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
                         img.drawString(as.getIterator(), i, j);
                     }
                     else if(i+10 > ancho){   
-                        c = this.getColorPromedio(i, j, ancho, 10+j);
+                        c = this.getColorPromedio(i, j, ancho, b+j);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
                         img.drawString(as.getIterator(), i, j);
                     }
                     else if(j+10 > alto){
-                        c = this.getColorPromedio(i, j, i+10, alto);
+                        c = this.getColorPromedio(i, j, i+a, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
                         img.drawString(as.getIterator(), i, j);
                     }
                     else {
-                        c = this.getColorPromedio(i, j, 10+i, 10+j);
+                        c = this.getColorPromedio(i, j, a+i, b+j);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
                         img.drawString(as.getIterator(), i, j);
                         
