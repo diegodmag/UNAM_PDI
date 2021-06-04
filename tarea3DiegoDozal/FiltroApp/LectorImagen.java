@@ -551,7 +551,7 @@ class LectorImagen {
         }
 
         //Suponiendo que piden un rectangulo de 10x10     
-        public void drawM2D(){
+        public void drawM2D(int a, int b){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
             BufferedImage canvas = deepCopy(imagenFiltrada);
@@ -559,7 +559,8 @@ class LectorImagen {
 
             //Se genera un objeto 2d a partir de la imagen ingresada 
             Graphics2D img = canvas.createGraphics(); 
-            String chain = "M"; 
+            String chain = "M";
+            //String chain = "HOLA COMO ANDAMOS"; 
             //Generamos los Fonts 
             Font font = new Font("Arial", Font.PLAIN,6);
             //Para modificar los atributos del Font 
@@ -571,30 +572,27 @@ class LectorImagen {
 
             img.setFont(font);
 
-            int a =8; 
-            int b =8; 
-
             for (int i = 0; i < ancho; i+=a) {
                 for (int j = 0; j < alto; j+=b) { 
 
                     if(i+a > ancho && j+b > alto){
                         c = this.getColorPromedio(i, j, ancho, alto);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
                         img.drawString(as.getIterator(), i, j);
                     }
                     else if(i+10 > ancho){   
                         c = this.getColorPromedio(i, j, ancho, b+j);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
                         img.drawString(as.getIterator(), i, j);
                     }
                     else if(j+10 > alto){
                         c = this.getColorPromedio(i, j, i+a, alto);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
                         img.drawString(as.getIterator(), i, j);
                     }
                     else {
                         c = this.getColorPromedio(i, j, a+i, b+j);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,1);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
                         img.drawString(as.getIterator(), i, j);
                         
                     }
@@ -604,42 +602,58 @@ class LectorImagen {
             this.imagenFiltrada = canvas; 
         }
 
+        public void drawM2DBlanckAndWhite(int a, int b){
+            
+            //Obtenemos una copia en blanco de la imagen en la cual pintar 
+            filtro_gris_(1);
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
 
-        ///
-        public void draw2DImage(){
+            //Se genera un objeto 2d a partir de la imagen ingresada 
+            Graphics2D img = canvas.createGraphics(); 
+            String chain = "M";
+            //String chain = "HOLA COMO ANDAMOS"; 
+            //Generamos los Fonts 
+            Font font = new Font("Arial", Font.PLAIN,6);
+            //Para modificar los atributos del Font 
+            AttributedString as = new AttributedString(chain);
+            as.addAttribute(TextAttribute.FONT, font);
+            //Color a usar 
+            Color c;
+            
 
-            Graphics2D img = imagenFiltrada.createGraphics();
-            //Linea desconocida 
-            /* img.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON); */
-            
-            String cadena = "M ";
-            Font font = new Font("Purisa", Font.PLAIN, 10); 
-            AttributedString as1 = new AttributedString(cadena);
-            as1.addAttribute(TextAttribute.FONT, font);
-            as1.addAttribute(TextAttribute.FOREGROUND, Color.black, 0, 1);
-            
-            
             img.setFont(font);
 
-            
-            
-            for (int i = 10; i < ancho; i+=10) {
-                for (int j = 10; j < alto; j+=10) {
-                    img.drawString(as1.getIterator(), i, j);        
-                }    
-            }
+            for (int i = 0; i < ancho; i+=a) {
+                for (int j = 0; j < alto; j+=b) { 
 
-            /* Graphics2D dibujo = imagenFiltrada.createGraphics(); 
-            char[] caracter = {'@'}; */    
-              
-
-        /*     for (int i = 0; i < ancho; i++) {
-                for (int j = 0; j < alto; j++) {
-                    dibujo.drawChars(data, offset, length, x, y);
+                    if(i+a > ancho && j+b > alto){
+                        c = this.getColorPromedio(i, j, ancho, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else if(i+10 > ancho){   
+                        c = this.getColorPromedio(i, j, ancho, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else if(j+10 > alto){
+                        c = this.getColorPromedio(i, j, i+a, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else {
+                        c = this.getColorPromedio(i, j, a+i, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                        
+                    }
+                       
                 }
-            } */
+            }
+            this.imagenFiltrada = canvas; 
         }
+
 
     /**
      * Metodo para blanquear la superficie de la imagen

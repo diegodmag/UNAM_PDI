@@ -41,7 +41,7 @@ public class FiltroApp extends JFrame{
     private ImageIcon imagenOriginal;
     private File file; 
 
-    ///Para la modificacion de la imagen 
+    ///Para la modificacion de la imagenRGB 
     private JPanel panelRGB;
     private JFrame frameRGB; 
     private JSlider sliderRed; 
@@ -54,8 +54,17 @@ public class FiltroApp extends JFrame{
     private JLabel greenValueLabel;
     private JLabel blueValueLabel; 
     ///PRUEBA 
-    private JLabel imagen_letras; 
+     
     
+    //Para convertir una imagen en letras 
+    private JPanel panelLetters; 
+    private JFrame frameLetters; 
+    private JTextField textFieldAnchoLetters;
+    private JTextField textFieldAltoLetters;
+    private JButton buttonAplicarLetters; 
+
+
+
 
     private JButton buttonAplicarComponenteRGB;
 
@@ -78,18 +87,25 @@ public class FiltroApp extends JFrame{
         //Coloca los componentes de ventanas hijas 
         this.colocarComponentesRGB();
 
+        this.colocarComponentesLetters();
+        
+
         //Coloca los eventos
         this.colocarEventos();
         
     }
 
     private void colocarFrames(){
-        this.setBounds(300, 200, 1800, 800);
+        this.setBounds(75, 100, 1800, 800);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         frameRGB = new JFrame();
-        frameRGB.setBounds(450, 300, 600, 400);
+        frameRGB.setBounds(600, 300, 600, 400);
         frameRGB.setBackground(Color.RED);
+
+        frameLetters = new JFrame();
+        frameLetters.setBounds(750,300,300,250);
+        frameLetters.setBackground(Color.RED);
 
     }
 
@@ -103,6 +119,11 @@ public class FiltroApp extends JFrame{
         panelRGB.setLayout(null);
         frameRGB.getContentPane().add(panelRGB);
         //panelPrincipal.add(panelRGB);
+
+        panelLetters = new JPanel();
+        panelLetters.setLayout(null);
+        frameLetters.getContentPane().add(panelLetters); 
+        
     }
 
  
@@ -155,6 +176,7 @@ public class FiltroApp extends JFrame{
         buttonAplicarMosaico.setBounds(20, 510, 200, 20);
         panelPrincipal.add(buttonAplicarMosaico);
         buttonAplicarMosaico.setVisible(false);
+       
 
     }
 
@@ -182,7 +204,7 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Sharpen");
         comboboxFiltros.addItem("Emboss");
         //PRUEBA DE DIBUJO EN GRAPHICS2D 
-        comboboxFiltros.addItem("Dibujar @");
+        comboboxFiltros.addItem("Dibujar M");
         //
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
@@ -207,6 +229,32 @@ public class FiltroApp extends JFrame{
         textFIeldAltoMosaico.setVisible(false);
 
     }
+
+    private void colocarComponentesLetters(){
+         
+        JLabel jlabelrecomendacion = new JLabel("Dimensiones recomendadas: 5x5");
+        jlabelrecomendacion.setBounds(20,20,250,20);
+        panelLetters.add(jlabelrecomendacion);
+
+        textFieldAnchoLetters = new JTextField();
+        textFieldAnchoLetters.setBounds(100, 70, 100, 20);
+        panelLetters.add(textFieldAnchoLetters);
+        
+        //textFieldAnchoLetters.setBounds(x, y, width, height);
+        
+        textFieldAltoLetters = new JTextField();
+        textFieldAltoLetters.setBounds(100, 120, 100, 20);
+        panelLetters.add(textFieldAltoLetters);
+
+        buttonAplicarLetters = new JButton("Aplicar");
+        buttonAplicarLetters.setBounds(100, 180, 100, 20);
+        panelLetters.add(buttonAplicarLetters);
+
+
+    }
+
+
+
 
     private void colocarComponentesRGB(){
         
@@ -285,16 +333,6 @@ public class FiltroApp extends JFrame{
     }
 
     
-
-/*     private void colocarScrollBar(){
-        scrollBarBrillo = new JScrollBar(0,0,1,0,100);
-        scrollBarBrillo.setBounds(20, 360, 200, 20);
-        panelPrincipal.add(scrollBarBrillo);
-
-        labelBrillo.setVisible(true);
-    }
- */
-
     public void colocarEventos(){
 
             //Evento de busqueda 
@@ -502,13 +540,10 @@ public class FiltroApp extends JFrame{
                         
                     }
 
-                    if(filtro.equals("Dibujar @")){
-                        LectorImagen lector = new LectorImagen(file.getAbsolutePath());
-                        lector.drawM2D();
-                        Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
-                            ImageIcon nuevaImagen = new ImageIcon(imgScale);
-                            labelImagenFiltro.setIcon(nuevaImagen);                     
-                        
+                    if(filtro.equals("Dibujar M")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+
                     }
                     
                     
@@ -517,6 +552,10 @@ public class FiltroApp extends JFrame{
 
             } );
             
+
+
+
+
 
             buttonAplicarBrillo.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -532,6 +571,8 @@ public class FiltroApp extends JFrame{
              });
 
 
+
+             /**Corregir  */
              buttonAplicarMosaico.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     int a = Integer.parseInt(textFieldAnchoMosaico.getText());
@@ -559,6 +600,15 @@ public class FiltroApp extends JFrame{
                 }
              });
 
+             
+             buttonAplicarLetters.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        accionRealizadaLetters(2);
+
+                    } catch (Exception ex){} 
+                }
+             });
 
              sliderRed.addChangeListener(new ChangeListener(){
                 public void stateChanged(ChangeEvent e){
@@ -580,6 +630,35 @@ public class FiltroApp extends JFrame{
 
     }   
 
+    public void accionRealizadaLetters(int n){
+
+        int ancho = Integer.parseInt(textFieldAnchoLetters.getText());
+        int alto = Integer.parseInt(textFieldAltoLetters.getText());
+
+        LectorImagen lector = new LectorImagen(file.getAbsolutePath());
+        Image imgScale; 
+        ImageIcon nuevaImagen; 
+
+       switch (n) {
+           case 1:
+           lector.drawM2D(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen);
+            break; 
+           case 2: 
+           lector.drawM2DBlanckAndWhite(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen);
+           break;
+       
+           default:
+               break;
+       }
+
+
+    }
     
 
 
