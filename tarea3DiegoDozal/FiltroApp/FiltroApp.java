@@ -604,8 +604,9 @@ public class FiltroApp extends JFrame{
              buttonAplicarLetters.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try{
-                        accionRealizadaLetters(2);
-
+                        //////////
+                        accionRealizadaLetters(3);
+                        /////////
                     } catch (Exception ex){} 
                 }
              });
@@ -652,7 +653,12 @@ public class FiltroApp extends JFrame{
            nuevaImagen = new ImageIcon(imgScale);
            labelImagenFiltro.setIcon(nuevaImagen);
            break;
-       
+           case 3:
+           lector.drawGrayLetters(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen);
+           break;
            default:
                break;
        }

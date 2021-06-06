@@ -574,7 +574,7 @@ class LectorImagen {
 
             for (int i = 0; i < ancho; i+=a) {
                 for (int j = 0; j < alto; j+=b) { 
-
+                    
                     if(i+a > ancho && j+b > alto){
                         c = this.getColorPromedio(i, j, ancho, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
@@ -596,22 +596,32 @@ class LectorImagen {
                         img.drawString(as.getIterator(), i, j);
                         
                     }
-                       
+                    
                 }
             }
             this.imagenFiltrada = canvas; 
         }
 
+
         public void drawM2DBlanckAndWhite(int a, int b){
+            filtro_gris_(1);
+            drawM2D(a, b); 
+
+        }
+
+        public void drawGrayLetters(int a, int b){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
-            filtro_gris_(1);
+            //filtro_gris_(1);
             BufferedImage canvas = deepCopy(imagenFiltrada);
             limpiarImagen(canvas);
 
             //Se genera un objeto 2d a partir de la imagen ingresada 
             Graphics2D img = canvas.createGraphics(); 
-            String chain = "M";
+            ///ESTA CADENA PUEDEN SER TODOS LOS POSIBLES CARACTERES A TOMAR Y CON EL METODO 
+            /// as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length()); DETERMINAMOS QUE RAGO TOMAR 
+            //METODO/S QUE INGRESE UN entero y de los indices de la cadena o 
+            String chain = "MNH#QUAD0Y2$%+, ";
             //String chain = "HOLA COMO ANDAMOS"; 
             //Generamos los Fonts 
             Font font = new Font("Arial", Font.PLAIN,6);
@@ -626,34 +636,123 @@ class LectorImagen {
 
             for (int i = 0; i < ancho; i+=a) {
                 for (int j = 0; j < alto; j+=b) { 
-
+                    
                     if(i+a > ancho && j+b > alto){
                         c = this.getColorPromedio(i, j, ancho, alto);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
                     }
                     else if(i+10 > ancho){   
                         c = this.getColorPromedio(i, j, ancho, b+j);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
                     }
                     else if(j+10 > alto){
                         c = this.getColorPromedio(i, j, i+a, alto);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
                     }
                     else {
                         c = this.getColorPromedio(i, j, a+i, b+j);
-                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
                         
                     }
-                       
+                    
                 }
             }
             this.imagenFiltrada = canvas; 
         }
 
+        /// METODO QUE DETERMINA EL RANGO PARA CONSIDERAR DE UNA CADENA DADO EL VALOR INTRODUCIDO
+        public int[] determinarCaracter(int value){
+
+            int[] rango = {0,0}; 
+    
+            if (value >= 0 &&  value <= 15) {
+                rango[0]=0;
+                rango[1]=1;
+                return rango; 
+            }
+            if (value >= 16 &&  value <= 31) {
+                rango[0]=1;
+                rango[1]=2;
+                return rango; 
+            }
+            if (value >= 32 &&  value <= 47) {
+                rango[0]=2;
+                rango[1]=3;
+                return rango; 
+            }
+            if (value >= 48 &&  value <= 63) {
+                rango[0]=3;
+                rango[1]=4;
+                return rango; 
+            }
+            if (value >= 64 &&  value <= 79) {
+                rango[0]=4;
+                rango[1]=5;
+                return rango; 
+            }
+            if (value >= 80 &&  value <= 95) {
+                rango[0]=5;
+                rango[1]=6;
+                return rango;  
+            }
+            if (value >= 96 &&  value <= 111) {
+                rango[0]=6;
+                rango[1]=7;
+                return rango; 
+            }
+            if (value >= 112 &&  value <= 127) {
+                rango[0]=7;
+                rango[1]=8;
+                return rango;  
+            }
+            if (value >= 128 &&  value <= 143) {
+                rango[0]=8;
+                rango[1]=9;
+                return rango;  
+            }
+            if (value >= 144 &&  value <= 159) {
+                rango[0]=9;
+                rango[1]=10;
+                return rango;  
+            }
+            if (value >= 160 &&  value <= 175) {
+                rango[0]=10;
+                rango[1]=11;
+                return rango;  
+            }
+            if (value >= 176 &&  value <= 191) {
+                rango[0]=11;
+                rango[1]=12;
+                return rango;  
+            }
+            if (value >= 192 &&  value <= 209) {
+                rango[0]=12;
+                rango[1]=13;
+                return rango;  
+            }
+            if (value >= 210 &&  value <= 225) {
+                rango[0]=13;
+                rango[1]=14;
+                return rango; 
+            }
+            if (value >= 226 &&  value <= 239) {
+                rango[0]=14;
+                rango[1]=15;
+                return rango; 
+            }
+            if (value >= 240 &&  value <= 255) {
+                rango[0]=15;
+                rango[1]=16;
+                return rango;  
+            }
+    
+            return rango;
+    
+        }
 
     /**
      * Metodo para blanquear la superficie de la imagen
