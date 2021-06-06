@@ -61,7 +61,9 @@ public class FiltroApp extends JFrame{
     private JFrame frameLetters; 
     private JTextField textFieldAnchoLetters;
     private JTextField textFieldAltoLetters;
-    private JButton buttonAplicarLetters; 
+    private JLabel jlabelrecomendacion;
+    private JButton buttonAplicarLetters;
+    private int filt;  
 
 
 
@@ -204,7 +206,11 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Sharpen");
         comboboxFiltros.addItem("Emboss");
         //PRUEBA DE DIBUJO EN GRAPHICS2D 
-        comboboxFiltros.addItem("Dibujar M");
+        comboboxFiltros.addItem("Dibujar M (COLOR)");
+        comboboxFiltros.addItem("Dibujar M (GRISES)");
+        comboboxFiltros.addItem("Dibujar Caracteres");
+        comboboxFiltros.addItem("Dibujar Caracteres (COLOR)");
+        comboboxFiltros.addItem("Dibujar Caracteres (GRISES)");
         //
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
@@ -232,7 +238,7 @@ public class FiltroApp extends JFrame{
 
     private void colocarComponentesLetters(){
          
-        JLabel jlabelrecomendacion = new JLabel("Dimensiones recomendadas: 5x5");
+        jlabelrecomendacion = new JLabel("Dimensiones recomendadas: 5x5");
         jlabelrecomendacion.setBounds(20,20,250,20);
         panelLetters.add(jlabelrecomendacion);
 
@@ -539,10 +545,35 @@ public class FiltroApp extends JFrame{
                         frameRGB.setVisible(true);                     
                         
                     }
-
-                    if(filtro.equals("Dibujar M")){
+                    
+                    if(filtro.equals("Dibujar M (COLOR)")){
                         //System.out.println("Evento ");
                         frameLetters.setVisible(true); 
+                        filt = 1;
+
+                    }
+                    if(filtro.equals("Dibujar M (GRISES)")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 2; 
+
+                    }
+                    if(filtro.equals("Dibujar Caracteres")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 3; 
+
+                    }
+                    if(filtro.equals("Dibujar Caracteres (COLOR)")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 5; 
+
+                    }
+                    if(filtro.equals("Dibujar Caracteres (GRISES)")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 4; 
 
                     }
                     
@@ -605,7 +636,8 @@ public class FiltroApp extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     try{
                         //////////
-                        accionRealizadaLetters(3);
+                        accionRealizadaLetters(filt);
+                        frameLetters.setVisible(false);
                         /////////
                     } catch (Exception ex){} 
                 }
@@ -654,11 +686,24 @@ public class FiltroApp extends JFrame{
            labelImagenFiltro.setIcon(nuevaImagen);
            break;
            case 3:
-           lector.drawGrayLetters(ancho,alto);
+           lector.drawOnlyLetters(ancho,alto);
            imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
            nuevaImagen = new ImageIcon(imgScale);
            labelImagenFiltro.setIcon(nuevaImagen);
            break;
+           case 4:
+           lector.drawGreyLetters(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen);
+           break;
+           case 5:
+           lector.drawLetters(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen);
+           break;
+           
            default:
                break;
        }

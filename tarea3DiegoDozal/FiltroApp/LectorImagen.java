@@ -609,7 +609,13 @@ class LectorImagen {
 
         }
 
-        public void drawGrayLetters(int a, int b){
+
+        /**
+         * Metodo para Imprimir caracteres en negro que representen la imagen 
+         * @param a
+         * @param b
+         */
+        public void drawOnlyLetters(int a, int b){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
             //filtro_gris_(1);
@@ -629,7 +635,7 @@ class LectorImagen {
             AttributedString as = new AttributedString(chain);
             as.addAttribute(TextAttribute.FONT, font);
             //Color a usar 
-            Color c;
+            Color c = Color.black;
             
 
             img.setFont(font);
@@ -663,6 +669,80 @@ class LectorImagen {
             }
             this.imagenFiltrada = canvas; 
         }
+
+        /**
+         * Metodo para Imprimir caracteres en los colores que representen la imagen 
+         * @param a
+         * @param b
+         */
+        public void drawLetters(int a, int b){
+            
+            //Obtenemos una copia en blanco de la imagen en la cual pintar 
+            //filtro_gris_(1);
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
+
+            //Se genera un objeto 2d a partir de la imagen ingresada 
+            Graphics2D img = canvas.createGraphics(); 
+            ///ESTA CADENA PUEDEN SER TODOS LOS POSIBLES CARACTERES A TOMAR Y CON EL METODO 
+            /// as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length()); DETERMINAMOS QUE RAGO TOMAR 
+            //METODO/S QUE INGRESE UN entero y de los indices de la cadena o 
+            String chain = "MNH#QUAD0Y2$%+, ";
+            //String chain = "HOLA COMO ANDAMOS"; 
+            //Generamos los Fonts 
+            Font font = new Font("Arial", Font.PLAIN,6);
+            //Para modificar los atributos del Font 
+            AttributedString as = new AttributedString(chain);
+            as.addAttribute(TextAttribute.FONT, font);
+            Color c; 
+            
+
+            img.setFont(font);
+
+            for (int i = 0; i < ancho; i+=a) {
+                for (int j = 0; j < alto; j+=b) { 
+                    
+                    if(i+a > ancho && j+b > alto){
+                        c = this.getColorPromedio(i, j, ancho, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
+                    }
+                    else if(i+10 > ancho){   
+                        c = this.getColorPromedio(i, j, ancho, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
+                    }
+                    else if(j+10 > alto){
+                        c = this.getColorPromedio(i, j, i+a, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
+                    }
+                    else {
+                        c = this.getColorPromedio(i, j, a+i, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(null,determinarCaracter(c.getRed())[0],determinarCaracter(c.getRed())[1]), i, j);
+                        
+                    }
+                    
+                }
+            }
+            this.imagenFiltrada = canvas; 
+        }
+
+        /**
+         * Metodo para Imprimir caracteres en tonos de gris  que representen la imagen
+         * @param a
+         * @param b
+         */
+        public void drawGreyLetters(int a, int b){
+            filtro_gris_(1);
+            drawLetters(a, b);
+        }
+
+
+
+
+
 
         /// METODO QUE DETERMINA EL RANGO PARA CONSIDERAR DE UNA CADENA DADO EL VALOR INTRODUCIDO
         public int[] determinarCaracter(int value){
