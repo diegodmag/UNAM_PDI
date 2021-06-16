@@ -61,7 +61,9 @@ public class FiltroApp extends JFrame{
     private JFrame frameLetters; 
     private JTextField textFieldAnchoLetters;
     private JTextField textFieldAltoLetters;
+    private JTextField textFielCadena; 
     private JLabel jlabelrecomendacion;
+    private JLabel jlabelcadena; 
     private JButton buttonAplicarLetters;
     private int filt;  
 
@@ -211,6 +213,10 @@ public class FiltroApp extends JFrame{
         comboboxFiltros.addItem("Dibujar Caracteres");
         comboboxFiltros.addItem("Dibujar Caracteres (COLOR)");
         comboboxFiltros.addItem("Dibujar Caracteres (GRISES)");
+        comboboxFiltros.addItem("Dibujar Cadena");
+        comboboxFiltros.addItem("Dibujar Domino");
+        comboboxFiltros.addItem("Dibujar Domino Negro");
+        comboboxFiltros.addItem("Dibujar Naipes");
         //
         comboboxFiltros.setBounds(30, 90, 200, 20);
         panelPrincipal.add(comboboxFiltros);  
@@ -243,14 +249,24 @@ public class FiltroApp extends JFrame{
         panelLetters.add(jlabelrecomendacion);
 
         textFieldAnchoLetters = new JTextField();
-        textFieldAnchoLetters.setBounds(100, 70, 100, 20);
+        textFieldAnchoLetters.setBounds(80, 60, 50, 20);
         panelLetters.add(textFieldAnchoLetters);
-        
         //textFieldAnchoLetters.setBounds(x, y, width, height);
         
         textFieldAltoLetters = new JTextField();
-        textFieldAltoLetters.setBounds(100, 120, 100, 20);
+        textFieldAltoLetters.setBounds(160, 60, 50, 20);
         panelLetters.add(textFieldAltoLetters);
+
+        //textFielCadena 
+        textFielCadena = new JTextField();
+        textFielCadena.setBounds(90,140,120,20);
+        textFielCadena.setVisible(false);
+        panelLetters.add(textFielCadena);
+
+        jlabelcadena = new JLabel("Ingrese la cadena");
+        jlabelcadena.setBounds(90,115,150,20);
+        jlabelcadena.setVisible(false);
+        panelLetters.add(jlabelcadena);
 
         buttonAplicarLetters = new JButton("Aplicar");
         buttonAplicarLetters.setBounds(100, 180, 100, 20);
@@ -576,6 +592,32 @@ public class FiltroApp extends JFrame{
                         filt = 4; 
 
                     }
+                    if(filtro.equals("Dibujar Cadena")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        jlabelcadena.setVisible(true);
+                        textFielCadena.setVisible(true);
+                        filt = 6; 
+
+                    }
+                    if(filtro.equals("Dibujar Domino")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 7; 
+
+                    }
+                    if(filtro.equals("Dibujar Domino Negro")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 8; 
+
+                    }
+                    if(filtro.equals("Dibujar Naipes")){
+                        //System.out.println("Evento ");
+                        frameLetters.setVisible(true); 
+                        filt = 9; 
+
+                    }
                     
                     
                 }
@@ -665,6 +707,9 @@ public class FiltroApp extends JFrame{
 
     public void accionRealizadaLetters(int n){
 
+        jlabelcadena.setVisible(false);
+        textFielCadena.setVisible(false);
+
         int ancho = Integer.parseInt(textFieldAnchoLetters.getText());
         int alto = Integer.parseInt(textFieldAltoLetters.getText());
 
@@ -703,6 +748,30 @@ public class FiltroApp extends JFrame{
            nuevaImagen = new ImageIcon(imgScale);
            labelImagenFiltro.setIcon(nuevaImagen);
            break;
+           case 6:
+           lector.drawCadena(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen); 
+           break;
+           case 7:
+           lector.drawDomino(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen); 
+           break;
+           case 8:
+           lector.drawDominoBlack(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen); 
+           break;
+           case 9:
+           lector.drawDominoNaipes(ancho,alto);
+           imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
+           nuevaImagen = new ImageIcon(imgScale);
+           labelImagenFiltro.setIcon(nuevaImagen); 
+           break;
            
            default:
                break;
@@ -711,9 +780,6 @@ public class FiltroApp extends JFrame{
 
     }
     
-
-
-
 
     public static void main(String[] args){
         java.awt.EventQueue.invokeLater(new Runnable() {

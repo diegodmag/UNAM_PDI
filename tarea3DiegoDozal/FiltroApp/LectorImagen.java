@@ -9,6 +9,9 @@ import java.text.AttributedString;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import java.awt.Font;
+import javax.swing.JList;
+
 
 /**
  * Clase que modela a un LectorImagen, se encarga de leer la imagen cargada por el usuario y 
@@ -449,7 +452,7 @@ class LectorImagen {
 
 
         /**
-         * Filtro que aplica una convulsion con arreglo bidimensional de enteros 
+         * Filtro que aplica una convolusion con arreglo bidimensional de enteros 
          * @param convolution
          * @param f
          * @param b
@@ -550,7 +553,7 @@ class LectorImagen {
            }
         }
 
-        //Suponiendo que piden un rectangulo de 10x10     
+          
         public void drawM2D(int a, int b){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
@@ -617,21 +620,16 @@ class LectorImagen {
          */
         public void drawOnlyLetters(int a, int b){
             
-            //Obtenemos una copia en blanco de la imagen en la cual pintar 
-            //filtro_gris_(1);
             BufferedImage canvas = deepCopy(imagenFiltrada);
             limpiarImagen(canvas);
 
-            //Se genera un objeto 2d a partir de la imagen ingresada 
+
             Graphics2D img = canvas.createGraphics(); 
-            ///ESTA CADENA PUEDEN SER TODOS LOS POSIBLES CARACTERES A TOMAR Y CON EL METODO 
-            /// as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length()); DETERMINAMOS QUE RAGO TOMAR 
-            //METODO/S QUE INGRESE UN entero y de los indices de la cadena o 
+
             String chain = "MNH#QUAD0Y2$%+, ";
-            //String chain = "HOLA COMO ANDAMOS"; 
-            //Generamos los Fonts 
+
             Font font = new Font("Arial", Font.PLAIN,6);
-            //Para modificar los atributos del Font 
+
             AttributedString as = new AttributedString(chain);
             as.addAttribute(TextAttribute.FONT, font);
             //Color a usar 
@@ -677,21 +675,13 @@ class LectorImagen {
          */
         public void drawLetters(int a, int b){
             
-            //Obtenemos una copia en blanco de la imagen en la cual pintar 
-            //filtro_gris_(1);
             BufferedImage canvas = deepCopy(imagenFiltrada);
             limpiarImagen(canvas);
 
-            //Se genera un objeto 2d a partir de la imagen ingresada 
-            Graphics2D img = canvas.createGraphics(); 
-            ///ESTA CADENA PUEDEN SER TODOS LOS POSIBLES CARACTERES A TOMAR Y CON EL METODO 
-            /// as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length()); DETERMINAMOS QUE RAGO TOMAR 
-            //METODO/S QUE INGRESE UN entero y de los indices de la cadena o 
+             Graphics2D img = canvas.createGraphics(); 
             String chain = "MNH#QUAD0Y2$%+, ";
-            //String chain = "HOLA COMO ANDAMOS"; 
-            //Generamos los Fonts 
             Font font = new Font("Arial", Font.PLAIN,6);
-            //Para modificar los atributos del Font 
+
             AttributedString as = new AttributedString(chain);
             as.addAttribute(TextAttribute.FONT, font);
             Color c; 
@@ -740,9 +730,400 @@ class LectorImagen {
         }
 
 
+        /////EXPERIMENTAL 
+        public void drawCadena(int a, int b){
+            
+            //Obtenemos una copia en blanco de la imagen en la cual pintar 
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
+
+            //Se genera un objeto 2d a partir de la imagen ingresada 
+            Graphics2D img = canvas.createGraphics(); 
+            String chain = "CADENA";
+            //String chain = "HOLA COMO ANDAMOS"; 
+            //Generamos los Fonts 
+            Font font = new Font("Arial", Font.PLAIN,6);
+            //Para modificar los atributos del Font 
+            AttributedString as = new AttributedString(chain);
+            as.addAttribute(TextAttribute.FONT, font);
+            //Color a usar 
+            Color c;
+            
+
+            img.setFont(font);
+
+            for (int i = 0; i < ancho; i+=a) {
+                for (int j = 0; j < alto; j+=b) { 
+                    
+                    if(i+a > ancho && j+b > alto){
+                        c = this.getColorPromedio(i, j, ancho, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else if(i+10 > ancho){   
+                        c = this.getColorPromedio(i, j, ancho, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else if(j+10 > alto){
+                        c = this.getColorPromedio(i, j, i+a, alto);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                    }
+                    else {
+                        c = this.getColorPromedio(i, j, a+i, b+j);
+                        as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
+                        img.drawString(as.getIterator(), i, j);
+                        
+                    }
+                    
+                }
+            }
+            this.imagenFiltrada = canvas; 
+        }
+
+        /**
+         * Metodo que a partir de un .ttf de domino, dibuja una imagen 
+         * @param a
+         * @param b
+         */
+        public void drawDomino(int a, int b ){
+           
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
+
+           
+            Graphics2D img = canvas.createGraphics(); 
+            
+            //Genera el entorno grafico 
+            
+
+            String chain = "0123456";
+            String chain2 = ")!@#$%^";
+            AttributedString as = new AttributedString(chain);
+            AttributedString as2 = new AttributedString(chain2);
+            
+
+            String ttfname = "Lasvwd__.ttf"; 
+            
+            Font font; 
+            int iterations=0; 
+            
+                font = createFont(ttfname);
+
+                //Aqui se esta modificando la fuente con el objeto Font que generamos a partir del .ttf 
+                // SIN EMBARGO PARECE NO LEER EL .TTF 
+                img.setFont(font.deriveFont(Font.PLAIN, 20));
+
+                Color c;
+                for (int i = 0; i < ancho; i+=a) {
+                    for (int j = 0; j < alto; j+=b) { 
+                        
+                        if(i+a > ancho && j+b > alto){
+                            c = this.getColorPromedio(i, j, ancho, alto);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+
+                        }
+                        else if(i+10 > ancho){   
+                            c = this.getColorPromedio(i, j, ancho, b+j);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                        }
+                        else if(j+10 > alto){
+                            c = this.getColorPromedio(i, j, i+a, alto);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                        }
+                        else {
+                            c = this.getColorPromedio(i, j, a+i, b+j);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                            
+                        }
+                        
+                        iterations++; 
+                    }
+                }
+ 
+    
+
+            this.imagenFiltrada = canvas; 
+
+
+        }
+
+        /**
+         * Metodo que a partir de un .ttf de domino, dibuja una imagen 
+         * @param a
+         * @param b
+         */
+        public void drawDominoBlack(int a, int b ){
+           
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
+
+           
+            Graphics2D img = canvas.createGraphics(); 
+            
+            //Genera el entorno grafico 
+            
+
+            String chain = "0123456";
+            String chain2 = ")!@#$%^";
+            AttributedString as = new AttributedString(chain);
+            AttributedString as2 = new AttributedString(chain2);
+            
+
+            String ttfname = "Lasvbld_.ttf"; 
+            
+            Font font; 
+            int iterations=0; 
+            
+                font = createFont(ttfname);
+
+                //Aqui se esta modificando la fuente con el objeto Font que generamos a partir del .ttf 
+                // SIN EMBARGO PARECE NO LEER EL .TTF 
+                img.setFont(font.deriveFont(Font.PLAIN, 20));
+
+                Color c;
+                for (int i = 0; i < ancho; i+=a) {
+                    for (int j = 0; j < alto; j+=b) { 
+                        
+                        if(i+a > ancho && j+b > alto){
+                            c = this.getColorPromedio(i, j, ancho, alto);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+
+                        }
+                        else if(i+10 > ancho){   
+                            c = this.getColorPromedio(i, j, ancho, b+j);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                        }
+                        else if(j+10 > alto){
+                            c = this.getColorPromedio(i, j, i+a, alto);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                        }
+                        else {
+                            c = this.getColorPromedio(i, j, a+i, b+j);
+                            if (esPar(iterations)) {
+                                as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                                img.drawString(as.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);                                     
+                            } else {
+                                as2.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain2.length());
+                                img.drawString(as2.getIterator(null,determinarCaracterDomino(c.getRed())[0],determinarCaracterDomino(c.getRed())[1]), i, j);
+                            }
+                            
+                        }
+                        
+                        iterations++; 
+                    }
+                }
+ 
+    
+
+            this.imagenFiltrada = canvas; 
+
+
+        }
+
+
+                /**
+         * Metodo que a partir de un .ttf de domino, dibuja una imagen 
+         * @param a
+         * @param b
+         */
+        public void drawDominoNaipes(int a, int b ){
+           
+            BufferedImage canvas = deepCopy(imagenFiltrada);
+            limpiarImagen(canvas);
+
+           
+            Graphics2D img = canvas.createGraphics(); 
+            
+            //Genera el entorno grafico 
+            
+
+            String chain = "MLKJTHGFEDCBA";
+            AttributedString as = new AttributedString(chain);
+            
+            
+
+            String ttfname = "PLAYCRDS.TTF"; 
+            
+            Font font; 
+            int iterations=0; 
+            
+                font = createFont(ttfname);
+
+                //Aqui se esta modificando la fuente con el objeto Font que generamos a partir del .ttf 
+                // SIN EMBARGO PARECE NO LEER EL .TTF 
+                img.setFont(font.deriveFont(Font.PLAIN, 20));
+
+                Color c;
+                for (int i = 0; i < ancho; i+=a) {
+                    for (int j = 0; j < alto; j+=b) { 
+                        
+                        if(i+a > ancho && j+b > alto){
+                            c = this.getColorPromedio(i, j, ancho, alto);
+                            as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                            img.drawString(as.getIterator(null,determinarCaracterNaipes(c.getRed())[0],determinarCaracterNaipes(c.getRed())[1]), i, j);                                     
+
+                        }
+                        else if(i+10 > ancho){   
+                            c = this.getColorPromedio(i, j, ancho, b+j);
+                            as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                            img.drawString(as.getIterator(null,determinarCaracterNaipes(c.getRed())[0],determinarCaracterNaipes(c.getRed())[1]), i, j);                                     
+
+                        }
+                        else if(j+10 > alto){
+                            c = this.getColorPromedio(i, j, i+a, alto);
+                            as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                            img.drawString(as.getIterator(null,determinarCaracterNaipes(c.getRed())[0],determinarCaracterNaipes(c.getRed())[1]), i, j);                                     
+
+                        }
+                        else {
+                            c = this.getColorPromedio(i, j, a+i, b+j);
+                            as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
+                            img.drawString(as.getIterator(null,determinarCaracterNaipes(c.getRed())[0],determinarCaracterNaipes(c.getRed())[1]), i, j);                                     
+
+                        }
+                        
+                        iterations++; 
+                    }
+                }
+ 
+    
+
+            this.imagenFiltrada = canvas; 
+
+
+        }
 
 
 
+
+
+        public int[] determinarCaracterDominoIzquierdo(int value){
+            int[] rango = {0,0}; 
+    
+            if (value >= 0 &&  value <= 36) {
+                rango[0]=0;
+                rango[1]=1;
+                return rango; 
+            }
+            if (value >= 37 &&  value <= 72) {
+                rango[0]=1;
+                rango[1]=2;
+                return rango; 
+            }
+            if (value >= 73 &&  value <= 108) {
+                rango[0]=2;
+                rango[1]=3;
+                return rango; 
+            }
+            if (value >= 109 &&  value <= 144) {
+                rango[0]=3;
+                rango[1]=4;
+                return rango; 
+            }
+            if (value >= 145 &&  value <= 180) {
+                rango[0]=4;
+                rango[1]=5;
+                return rango; 
+            }
+            if (value >= 181 &&  value <= 216) {
+                rango[0]=5;
+                rango[1]=6;
+                return rango;  
+            }
+            if (value >= 217 &&  value <= 255) {
+                rango[0]=6;
+                rango[1]=7;
+                return rango; 
+            }
+
+            return rango;
+        }
+        
+        public int[] determinarCaracterDomino(int value){
+            int[] rango = {0,0}; 
+    
+            if (value >= 0 &&  value <= 36) {
+                rango[0]=0;
+                rango[1]=1;
+                return rango; 
+            }
+            if (value >= 37 &&  value <= 72) {
+                rango[0]=1;
+                rango[1]=2;
+                return rango; 
+            }
+            if (value >= 73 &&  value <= 108) {
+                rango[0]=2;
+                rango[1]=3;
+                return rango; 
+            }
+            if (value >= 109 &&  value <= 144) {
+                rango[0]=3;
+                rango[1]=4;
+                return rango; 
+            }
+            if (value >= 145 &&  value <= 180) {
+                rango[0]=4;
+                rango[1]=5;
+                return rango; 
+            }
+            if (value >= 181 &&  value <= 216) {
+                rango[0]=5;
+                rango[1]=6;
+                return rango;  
+            }
+            if (value >= 217 &&  value <= 255) {
+                rango[0]=6;
+                rango[1]=7;
+                return rango; 
+            }
+
+            return rango;
+        }
 
         /// METODO QUE DETERMINA EL RANGO PARA CONSIDERAR DE UNA CADENA DADO EL VALOR INTRODUCIDO
         public int[] determinarCaracter(int value){
@@ -833,7 +1214,80 @@ class LectorImagen {
             return rango;
     
         }
+        
+        public int[] determinarCaracterNaipes(int value){
+            int[] rango = {0,0}; 
+    
+            if (value >= 0 &&  value <= 20) {
+                rango[0]=0;
+                rango[1]=1;
+                return rango; 
+            }
+            if (value >= 21 &&  value <= 40) {
+                rango[0]=1;
+                rango[1]=2;
+                return rango; 
+            }
+            if (value >= 41 &&  value <= 60) {
+                rango[0]=2;
+                rango[1]=3;
+                return rango; 
+            }
+            if (value >= 61 &&  value <= 80) {
+                rango[0]=3;
+                rango[1]=4;
+                return rango; 
+            }
+            if (value >= 81 &&  value <= 100) {
+                rango[0]=4;
+                rango[1]=5;
+                return rango; 
+            }
+            if (value >= 101 &&  value <= 120) {
+                rango[0]=5;
+                rango[1]=6;
+                return rango;  
+            }
+            if (value >= 121 &&  value <= 140) {
+                rango[0]=6;
+                rango[1]=7;
+                return rango; 
+            }
+            if (value >= 141 &&  value <= 160) {
+                rango[0]=7;
+                rango[1]=8;
+                return rango;  
+            }
+            if (value >= 161 &&  value <= 180) {
+                rango[0]=8;
+                rango[1]=9;
+                return rango;  
+            }
+            if (value >= 181 &&  value <= 200) {
+                rango[0]=9;
+                rango[1]=10;
+                return rango;  
+            }
+            if (value >= 201 &&  value <= 220) {
+                rango[0]=10;
+                rango[1]=11;
+                return rango;  
+            }
+            if (value >= 221 &&  value <= 240) {
+                rango[0]=11;
+                rango[1]=12;
+                return rango;  
+            }
+            if (value >= 241 &&  value <= 255) {
+                rango[0]=12;
+                rango[1]=13;
+                return rango;  
+            }
 
+
+            return rango; 
+        }
+        
     /**
      * Metodo para blanquear la superficie de la imagen
      */
@@ -848,6 +1302,40 @@ class LectorImagen {
         }
     }
 
+
+    public boolean esPar(int n){
+
+        if(n%2 == 0){
+            return true;
+        }
+
+        return false; 
+
+    }   
+ 
+
+    /**
+     * Metodo para generar un objeto Font a partir de un .ttf 
+     * @param ruta
+     * @return
+     */
+    public Font createFont(String ruta) {
+        Font ttfBase = null;
+        Font telegraficoFont = null;
+        InputStream myStream = null;
+        String FONT_PATH_TELEGRAFICO = ruta;
+
+        try {
+            myStream = new BufferedInputStream(
+                    new FileInputStream(FONT_PATH_TELEGRAFICO));
+            ttfBase = Font.createFont(Font.TRUETYPE_FONT, myStream);
+            telegraficoFont = ttfBase.deriveFont(Font.PLAIN, 24);               
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println("Font not loaded.");
+        }
+        return telegraficoFont;
+    }
 
 
     static BufferedImage deepCopy(BufferedImage bi) {
