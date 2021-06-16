@@ -553,23 +553,24 @@ class LectorImagen {
            }
         }
 
-          
+        /**
+         * Filtro que imprime la imagen como M's con el color correspondiente a la region 
+         * @param a
+         * @param b
+         */ 
         public void drawM2D(int a, int b){
             
-            //Obtenemos una copia en blanco de la imagen en la cual pintar 
+            
             BufferedImage canvas = deepCopy(imagenFiltrada);
             limpiarImagen(canvas);
 
-            //Se genera un objeto 2d a partir de la imagen ingresada 
             Graphics2D img = canvas.createGraphics(); 
             String chain = "M";
-            //String chain = "HOLA COMO ANDAMOS"; 
-            //Generamos los Fonts 
             Font font = new Font("Arial", Font.PLAIN,6);
-            //Para modificar los atributos del Font 
+            
             AttributedString as = new AttributedString(chain);
             as.addAttribute(TextAttribute.FONT, font);
-            //Color a usar 
+            
             Color c;
             
 
@@ -605,7 +606,11 @@ class LectorImagen {
             this.imagenFiltrada = canvas; 
         }
 
-
+        /**
+         * Metodo que utiliza el anterior para imprimir M's en tonos de gris 
+         * @param a
+         * @param b
+         */
         public void drawM2DBlanckAndWhite(int a, int b){
             filtro_gris_(1);
             drawM2D(a, b); 
@@ -730,7 +735,12 @@ class LectorImagen {
         }
 
 
-        /////EXPERIMENTAL 
+        /**
+         * Metodo que imprime la imagen a partir de una cadena ingresada 
+         * @param a
+         * @param b
+         * @param chain
+         */
         public void drawCadena(int a, int b, String chain){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
@@ -750,32 +760,33 @@ class LectorImagen {
 
             img.setFont(font);
 
-            for (int i = 0; i < ancho; i+=a) {
-                for (int j = 0; j < alto; j+=b) { 
+
+            for (int i = 0; i < alto; i+=b) {
+                for (int j = 0; j < ancho; j+=a) { 
                     
                     if (chainCont == chain.length()) {
                         chainCont = 0;
                     }
 
-                    if(i+a > ancho && j+b > alto){
-                        c = this.getColorPromedio(i, j, ancho, alto);
+                    if(j+a > ancho && i+b > alto){
+                        c = this.getColorPromedio(j, i, ancho, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), j, i);
                     }
-                    else if(i+10 > ancho){   
-                        c = this.getColorPromedio(i, j, ancho, b+j);
+                    else if(j+10 > ancho){   
+                        c = this.getColorPromedio(j, i, ancho, b+i);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), j, i);
                     }
-                    else if(j+10 > alto){
-                        c = this.getColorPromedio(i, j, i+a, alto);
+                    else if(i+10 > alto){
+                        c = this.getColorPromedio(j, i, j+a, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), j, i);
                     }
                     else {
-                        c = this.getColorPromedio(i, j, a+i, b+j);
+                        c = this.getColorPromedio(j, i, a+j, b+i);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), j, i);
                         
                     }
 
@@ -1043,7 +1054,9 @@ class LectorImagen {
 
 
 
-
+        /**
+         * METODOS AUXILIARES 
+         */
 
         public int[] determinarCaracterDominoIzquierdo(int value){
             int[] rango = {0,0}; 
