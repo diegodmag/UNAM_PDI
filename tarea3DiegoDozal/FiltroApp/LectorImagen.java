@@ -731,7 +731,7 @@ class LectorImagen {
 
 
         /////EXPERIMENTAL 
-        public void drawCadena(int a, int b){
+        public void drawCadena(int a, int b, String chain){
             
             //Obtenemos una copia en blanco de la imagen en la cual pintar 
             BufferedImage canvas = deepCopy(imagenFiltrada);
@@ -739,9 +739,6 @@ class LectorImagen {
 
             //Se genera un objeto 2d a partir de la imagen ingresada 
             Graphics2D img = canvas.createGraphics(); 
-            String chain = "CADENA";
-            //String chain = "HOLA COMO ANDAMOS"; 
-            //Generamos los Fonts 
             Font font = new Font("Arial", Font.PLAIN,6);
             //Para modificar los atributos del Font 
             AttributedString as = new AttributedString(chain);
@@ -749,33 +746,40 @@ class LectorImagen {
             //Color a usar 
             Color c;
             
+            int chainCont =0; 
 
             img.setFont(font);
 
             for (int i = 0; i < ancho; i+=a) {
                 for (int j = 0; j < alto; j+=b) { 
                     
+                    if (chainCont == chain.length()) {
+                        chainCont = 0;
+                    }
+
                     if(i+a > ancho && j+b > alto){
                         c = this.getColorPromedio(i, j, ancho, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
                     }
                     else if(i+10 > ancho){   
                         c = this.getColorPromedio(i, j, ancho, b+j);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
                     }
                     else if(j+10 > alto){
                         c = this.getColorPromedio(i, j, i+a, alto);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
                     }
                     else {
                         c = this.getColorPromedio(i, j, a+i, b+j);
                         as.addAttribute(TextAttribute.FOREGROUND, c,0,chain.length());
-                        img.drawString(as.getIterator(), i, j);
+                        img.drawString(as.getIterator(null,chainCont,chainCont+1), i, j);
                         
                     }
+
+                    chainCont++; 
                     
                 }
             }

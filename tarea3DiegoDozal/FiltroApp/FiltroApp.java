@@ -749,7 +749,7 @@ public class FiltroApp extends JFrame{
            labelImagenFiltro.setIcon(nuevaImagen);
            break;
            case 6:
-           lector.drawCadena(ancho,alto);
+           lector.drawCadena(ancho,alto,textFielCadena.getText());
            imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
            nuevaImagen = new ImageIcon(imgScale);
            labelImagenFiltro.setIcon(nuevaImagen); 
