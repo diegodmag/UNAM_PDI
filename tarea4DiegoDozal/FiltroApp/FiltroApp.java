@@ -340,19 +340,6 @@ public class FiltroApp extends JFrame{
         buttonAplicarMarca.setBounds(220,280, 100,20);
         panelMArcaAgua.add(buttonAplicarMarca);
 
-
-
-
-/*         private JPanel panelMArcaAgua; 
-        private JFrame frameMarcaAgua; 
-        private JTextField textFieldCoordenadaXMarca; 
-        private JTextField textFieldCoordenadYMarca; 
-        private JLabel jlabelDimensionesImagen; 
-        private JLabel jlabelAnchoImagen; 
-        private JLabel jlabelAltoImagen; 
-        private JButton buttonAplicarMarca; */
-
-
     }   
 
     private void colocarComponentesRGB(){
