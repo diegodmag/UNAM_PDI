@@ -77,11 +77,16 @@ public class FiltroApp extends JFrame{
     private JTextField textFieldCoordenadaXMarca; 
     private JTextField textFieldCoordenadYMarca; 
     private JTextField textFieldMarca; 
+    private JTextField textFieldSizeFont; 
     private JLabel jlabelDimensionesImagen; 
     private JLabel jlabelAnchoImagen; 
     private JLabel jlabelAltoImagen; 
-    private JLabel jlabelMarcaAgua; 
+    private JLabel jlabelMarcaAgua;
+    private JLabel jlabelSizeFont;  
+    private JLabel jlabelNitidez; 
     private JButton buttonAplicarMarca; 
+    private JSlider jsliderNitidez; 
+    
 
     int cordX; 
     int cordY; 
@@ -211,6 +216,7 @@ public class FiltroApp extends JFrame{
         buttonAplicarMosaico.setVisible(false);
        
 
+
     }
 
     private void colocarCombobox(){
@@ -336,9 +342,32 @@ public class FiltroApp extends JFrame{
         textFieldMarca.setBounds(260,140,100,20);
         panelMArcaAgua.add(textFieldMarca);
 
+        jlabelSizeFont = new JLabel("Ingrese el tamano de letra");
+        jlabelSizeFont.setBounds(20, 170, 300, 20);
+        panelMArcaAgua.add(jlabelSizeFont); 
+
+        textFieldSizeFont = new JTextField();
+        textFieldSizeFont.setBounds(260, 170, 50, 20);
+        panelMArcaAgua.add(textFieldSizeFont); 
+
+        jlabelNitidez = new JLabel("Nitidez de Marca"); 
+        jlabelNitidez.setBounds(180, 210, 200, 20);
+        panelMArcaAgua.add(jlabelNitidez);
+
+        
+        jsliderNitidez = new JSlider(0,100);
+        jsliderNitidez.setBounds(75, 230, 350, 50);
+        jsliderNitidez.setPaintLabels(true);
+        jsliderNitidez.setPaintTicks(true);
+        jsliderNitidez.setMajorTickSpacing(10);
+        panelMArcaAgua.add(jsliderNitidez);
+
+
         buttonAplicarMarca = new JButton("Aplicar");
-        buttonAplicarMarca.setBounds(220,280, 100,20);
+        buttonAplicarMarca.setBounds(200,290, 100,20);
         panelMArcaAgua.add(buttonAplicarMarca);
+        
+
 
     }   
 
@@ -764,7 +793,10 @@ public class FiltroApp extends JFrame{
                         int x = Integer.parseInt(textFieldCoordenadaXMarca.getText());
                         int y = Integer.parseInt(textFieldCoordenadYMarca.getText());
                         String st = textFieldMarca.getText();
-                        lector.marcaDeAgua(x, y,st);
+                        int size = Integer.parseInt(textFieldSizeFont.getText());
+                        int nitidez = jsliderNitidez.getValue(); 
+
+                        lector.marcaDeAgua(x, y,st,size,nitidez);
                         Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
                         ImageIcon nuevaImagen = new ImageIcon(imgScale);
                         labelImagenFiltro.setIcon(nuevaImagen);

@@ -9,6 +9,8 @@ import java.text.AttributedString;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+
 import java.awt.Font;
 import javax.swing.JList;
 
@@ -1063,7 +1065,7 @@ class LectorImagen {
         /**
          * Metodo para realizar una marca de agu sobre la imagen 
          */
-        public void marcaDeAgua(int x, int y, String chain){
+        public void marcaDeAgua(int x, int y, String chain, int si, int nit){
 
             BufferedImage copy1 = deepCopy(imagenFiltrada);
             
@@ -1072,7 +1074,7 @@ class LectorImagen {
             Graphics2D img = copy1.createGraphics(); 
 
             AttributedString as = new AttributedString(chain);
-            Font font = new Font("Arial", Font.BOLD,26);
+            Font font = new Font("Arial", Font.BOLD,si);
             as.addAttribute(TextAttribute.FONT, font);
             as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
             if(x > ancho || x < 0){
@@ -1084,7 +1086,11 @@ class LectorImagen {
 
             img.drawString(as.getIterator(null,0,chain.length()), x, y);
 
-            nitidezDeMarca(copy1, 50);
+            if(nit < 0 || nit > 100){
+                nit = 50; 
+            }
+
+            nitidezDeMarca(copy1, nit);
 
         }
 
