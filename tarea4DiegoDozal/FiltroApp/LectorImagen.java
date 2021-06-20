@@ -1065,16 +1065,13 @@ class LectorImagen {
         /**
          * Metodo para realizar una marca de agu sobre la imagen 
          */
-        public void marcaDeAgua(int x, int y, String chain, int si, int nit){
+        public void marcaDeAgua(int x, int y, String chain, int si, int nit, String fuente){
 
             BufferedImage copy1 = deepCopy(imagenFiltrada);
             
-            
-
             Graphics2D img = copy1.createGraphics(); 
-
             AttributedString as = new AttributedString(chain);
-            Font font = new Font("Arial", Font.BOLD,si);
+            Font font = new Font(fuente, Font.PLAIN,si);
             as.addAttribute(TextAttribute.FONT, font);
             as.addAttribute(TextAttribute.FOREGROUND, Color.black,0,chain.length());
             if(x > ancho || x < 0){

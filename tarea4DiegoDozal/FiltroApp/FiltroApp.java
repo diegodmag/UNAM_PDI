@@ -86,6 +86,7 @@ public class FiltroApp extends JFrame{
     private JLabel jlabelNitidez; 
     private JButton buttonAplicarMarca; 
     private JSlider jsliderNitidez; 
+    private JComboBox <String>comboboxFuentes;
     
 
     int cordX; 
@@ -215,8 +216,6 @@ public class FiltroApp extends JFrame{
         panelPrincipal.add(buttonAplicarMosaico);
         buttonAplicarMosaico.setVisible(false);
        
-
-
     }
 
     private void colocarCombobox(){
@@ -362,6 +361,21 @@ public class FiltroApp extends JFrame{
         jsliderNitidez.setMajorTickSpacing(10);
         panelMArcaAgua.add(jsliderNitidez);
 
+
+        comboboxFuentes = new JComboBox<String>();
+        comboboxFuentes.addItem("Arial");
+        comboboxFuentes.addItem("DejaVu Sans");
+        comboboxFuentes.addItem("Century Schoolbook L");
+        comboboxFuentes.addItem("TimesRoman");
+        comboboxFuentes.addItem("FreeMono");
+        comboboxFuentes.addItem("KacstBook");
+        comboboxFuentes.addItem("Pothana2000");
+        comboboxFuentes.addItem("Nimbus Sans");
+        comboboxFuentes.addItem("Yrsa");
+        comboboxFuentes.addItem("Abyssinica SIL");
+
+        comboboxFuentes.setBounds(350,65,120,20);
+        panelMArcaAgua.add(comboboxFuentes);
 
         buttonAplicarMarca = new JButton("Aplicar");
         buttonAplicarMarca.setBounds(200,290, 100,20);
@@ -717,8 +731,7 @@ public class FiltroApp extends JFrame{
                             lector = new LectorImagen(file.getAbsolutePath());
                             jlabelDimensionesImagen.setText("Dimensiones de la imagen: "+lector.getAlto()+" x "+lector.getAncho());
                         } catch (Exception ex){}
-                        
-                        
+                                          
                     }
                     
                 }
@@ -796,12 +809,23 @@ public class FiltroApp extends JFrame{
                         int size = Integer.parseInt(textFieldSizeFont.getText());
                         int nitidez = jsliderNitidez.getValue(); 
 
-                        lector.marcaDeAgua(x, y,st,size,nitidez);
+                        String fuente = (String)comboboxFuentes.getSelectedItem();
+
+
+                        lector.marcaDeAgua(x, y,st,size,nitidez,fuente);
                         Image imgScale = lector.getImagenFiltrada().getScaledInstance(labelImagenFiltro.getWidth(), labelImagenFiltro.getHeight(), Image.SCALE_SMOOTH);
                         ImageIcon nuevaImagen = new ImageIcon(imgScale);
                         labelImagenFiltro.setIcon(nuevaImagen);
                         frameMarcaAgua.setVisible(false);
-                        /////////
+                        
+
+                        String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+                        for ( int i = 0; i < fonts.length; i++ )
+                        {
+                            System.out.println(fonts[i]);
+                        }
+
                     } catch (Exception ex){} 
                 }
              });
