@@ -1,9 +1,6 @@
-# PDITareas
-Respositorio donde se almacena las tareas a entregar de la materia Proceso Digital de Imagenes 
-En cada carpeta correspondiente a cada tarea hay informacion sobre como ejecutar la aplicacion y posibles complicaciones durante el proceso 
-# IMPORTANTE : Se necesita openjdk 11.0.10 2021-01-19 para ejecutar las tareas
-
-Alumno : Dozal Magnani Diego 
-No.Cuenta : 316032708
-
+## UNAM_PDI : Proceso Digital de Imágenes
+### Requisito : openjdk 11.0.10 2021-01-19 
+Prácticas académicas que involucran temas como filtros (escala de grises, contraste, blur) y convoluciones. Desarrolladas con Java 
+## UNAM_PDI : Proceso Digital de Imágenes
+### Requirement : openjdk 11.0.10 2021-01-19
 
